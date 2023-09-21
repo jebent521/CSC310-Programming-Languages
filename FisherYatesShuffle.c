@@ -7,12 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#define SIZE 10
 
 int shuffle(int[], int);
 
 int main(void) {
     srand(time(NULL));                                  // seed the random function
-    int SIZE = 10;
 
     int arr[SIZE];                                      // create array and fill it with numbers in ascending order
     for(int i=0; i<SIZE; i++) arr[i] = i;
