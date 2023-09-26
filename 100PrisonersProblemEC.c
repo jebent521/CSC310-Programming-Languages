@@ -8,7 +8,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
-#define SIZE 100
 #define ITERATIONS 100000
 
 void initializeRoom(int[], int);    // initialize the room with a random permutation of 1-SIZE
@@ -18,15 +17,21 @@ int testRoom(int[], int);           // given a room, determine if all prisoners 
 int main(void) {
     srand(time(NULL));                      // seed random number generator
 
-    int successes = 0;
-    for(int i=0; i<ITERATIONS; i++) {       // loop through iterations
-        int room[SIZE];                         // create array room
-        initializeRoom(room, SIZE);             // fill it with values and shuffle them
-        successes += testRoom(room, SIZE);      // test room and modify successes accordingly
+    printf("Number of iterations for each attempt is %d.\n\n", ITERATIONS);
+    printf(" Size\t| Success Rate\n");
+    printf("________|______________\n");
+    for(int SIZE=100;SIZE<1001;SIZE+=100)
+    {
+        int successes = 0;
+
+        for(int i=0; i<ITERATIONS; i++) {       // loop through iterations
+            int room[SIZE];                         // create array room
+            initializeRoom(room, SIZE);             // fill it with values and shuffle them
+            successes += testRoom(room, SIZE);      // test room and modify successes accordingly
+        }
+        // display results in table form
+        printf("%d\t| %f\n", SIZE, successes/(float)ITERATIONS);
     }
-    // display results
-    printf("Did %d iterations of room size %d.\n", ITERATIONS, SIZE);
-    printf("There were %d successes, with a success rate of %f.\n", successes, successes/(float)ITERATIONS);
 }
 
 void initializeRoom(int room[], int roomSize) {
