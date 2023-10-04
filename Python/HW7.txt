@@ -1,0 +1,2 @@
+#1
+def keep(arr, fun): return [i for i in arr if fun(i)]
