@@ -17,17 +17,17 @@ def main():
     #myquilt=pseudo_hilbert(3, a)
     #for row in myquilt:
     #    print(row)
-    myquilt = pile(sew(a, turn(b)), sew(unturn(b), turn(turn(a))))
-    for row in myquilt:
-        print(row)
-    
-    #print(quilt_to_string(myquilt, a_pattern, b_pattern))
+    myquilt = pinwheel(unturn(pile(sew(a, turn(turn(b))), sew(unturn(b), turn(a)))))
+
+    print(quilt_to_string(myquilt, a_pattern, b_pattern))
 
 # Defining Quilt Atoms
 a = [[('a', 0)]]
 b = [[('b', 0)]]
-a_pattern = ['┌─\n│┌', '─┐\n┐│', '┘│\n─┘', '│└\n└─']
-b_pattern = ['╭─\n│╭', '─╮\n╮│', '╯│\n─╯', '│╰\n╰─']
+a_pattern = ['┌─│┌', '─┐┐│', '┘│─┘', '│└└─']
+b_pattern = ['╭─│╭', '─╮╮│', '╯│─╯', '│╰╰─']
+h1_pattern = ['┌┐││', '─┐─┘', '││└┘', '┌─└─']
+h2_pattern = ['╭╮││', '─╮─╯', '││╰╯', '╭─╰─']
 
 # Turn Function (uses turn_atom, metamap, and rotate)
 def turn_atom(atom):
@@ -62,9 +62,15 @@ def quilt_to_string(quilt, string1, string2):
     for row in quilt:
         for atom in row:
             if atom[0] == 'a':
-                result += string1[atom[1]]
+                result += (string1[atom[1]])[:2]
             else:
-                result += string2[atom[1]]
+                result += (string2[atom[1]])[:2]
+        result += '\n'
+        for atom in row:
+            if atom[0] == 'a':
+                result += (string1[atom[1]])[2:4]
+            else:
+                result += (string2[atom[1]])[2:4]
         result += '\n'
     return result
 
@@ -76,7 +82,7 @@ def pile(quilt1, quilt2):       # piles quilt2 on top of quilt1
     return unturn(sew(turn(quilt1), turn(quilt2)))
 
 def pinwheel(quilt):
-    pass
+    return sew(pile(unturn(quilt), quilt), pile(turn(turn(quilt)), turn(quilt)))
 
 def repeat_block(quilt, m, n):
     pass
