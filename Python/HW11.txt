@@ -1,0 +1,7 @@
+from functools import cache
+from random import randint
+def rand_map(n):
+    @cache
+    def f(x):
+        return randint(0, n-1)
+    return f
