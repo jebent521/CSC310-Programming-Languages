@@ -65,13 +65,13 @@ def quilt_to_string(quilt, string1, string2):
     '''returns a stringified quilt using string1 for 'a' atoms and string2 for 'b' atoms'''
     result = ''
     for row in quilt:
-        for atom in row:
+        for atom in row:                        # iterate through each atom in the row, printing the first 2 characters
             if atom[0] == 'a':
                 result += (string1[atom[1]])[:2]
             else:
                 result += (string2[atom[1]])[:2]
         result += '\n'
-        for atom in row:
+        for atom in row:                        # iterate through each atom in the row, printing the last 2 characters
             if atom[0] == 'a':
                 result += (string1[atom[1]])[2:4]
             else:
@@ -112,14 +112,14 @@ def pseudo_hilbert(n, quilt):
 def reflect(quilt, horizontal = False):
     '''returns the mirror image of the quilt, defaulting to a vertical line of symmetry'''
     newQuilt = []
-    if horizontal:
-        for r in range(len(quilt)):
+    if horizontal:                  # reflecting down over a horizontal line of symmetry
+        for r in range(len(quilt)):         # append the rows in reverse order
             newQuilt.append(quilt[len(quilt) - r - 1])
         return metamap(flip_hori, newQuilt)
-    else:
+    else:                           # reflecting right over a vertical line of symmetry
         for row in quilt:
             newRow = []
-            for c in range(len(quilt[0])):
+            for c in range(len(quilt[0])):  # append each column in reverse order
                 newRow.append(row[len(quilt[0]) - c - 1])
             newQuilt.append(newRow)
         return metamap(flip_vert, newQuilt)
@@ -133,11 +133,12 @@ def flip_vert(atom):
 def flip_hori(atom):
     '''flips an atom across a horizontal line of symmetry'''
     return (atom[0], 3 - atom[1])
-    
 
 def checkerboard(quilt1, quilt2, m, n):
     '''returns a checkerboard pattern of quilts in a rectangle with m rows and n columns'''
-    return
+    newQuilt = []
+    
+    return newQuilt
 
 '''
 graphics, when you get around to them :)
