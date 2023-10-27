@@ -4,8 +4,8 @@ This is an implementation of Sethi's Little Quilt, a toy language for defining q
 
 A quilt is a list of rows, all of which need to have the same length.
     For example,
-        [[("a",1), ("a",0), ("b",1)], 
-         [("b",2), ("a",1), ("a", 3)]]
+       [[("a",1), ("a",0), ("b",1)], 
+        [("b",2), ("a",1), ("a", 3)]]
     is a 2x3 quilt.
 A row is a list of oriented atoms.
 An oriented atom is a tuple of the form ("q",i) where "q" is a quilt atom and i is an integer in the range 0,1,2,3.
@@ -14,7 +14,7 @@ A quilt atom will be a single letter either "a" or "b".
 """
 # Main Method
 def main():
-    myquilt = pinwheel(checkerboard(pinwheel(unturn(a)),pinwheel(turn(b)),10,10))
+    myquilt = checkerboard(pinwheel(unturn(a)),pinwheel(turn(b)),4,10)
     print(quilt_to_string(myquilt, a_pattern, b_pattern))
 
 
@@ -82,7 +82,7 @@ def quilt_to_string(quilt, string1, string2):
 # Convenience Functions
 def unturn(quilt):
     '''turns quilt once counterclockwise'''
-    return turn(turn(turn(quilt)))
+    return turn(turn(turn(quilt)))      # equal to 3 turns
 
 def pile(quilt1, quilt2):
     '''piles quilt1 on top of quilt2'''
@@ -136,23 +136,23 @@ def flip_hori(atom):
 
 def checkerboard(quilt1, quilt2, m, n):
     '''returns a checkerboard pattern of quilts in a rectangle with m rows and n columns'''
-    newQuilt = quilt1
-    for c in range(1, n):
+    newQuilt = quilt1                       # define first row (need something to pile the rest onto)
+    for c in range(1, n):                   # sew quilt1 and quilt2 onto it, alternating
         if c % 2 == 0:
             newQuilt = sew(newQuilt, quilt1)
         else:
             newQuilt = sew(newQuilt, quilt2)
-    for r in range(1, m):
-        if r % 2 == 0:
+    for r in range(1, m):                   # add on subsequent rows
+        if r % 2 == 0:                      # first quilt in each row alternates
             newRow = quilt1
         else:
             newRow = quilt2
-        for c in range(1, n):
+        for c in range(1, n):               # sew quilt1 and quilt2 onto newRow, alternating
             if r % 2 == c % 2:
                 newRow = sew(newRow, quilt1)
             else:
                 newRow = sew(newRow, quilt2)
-        newQuilt = pile(newQuilt, newRow)    
+        newQuilt = pile(newQuilt, newRow)   # pile newRow under newQuilt
     return newQuilt
 
 '''
