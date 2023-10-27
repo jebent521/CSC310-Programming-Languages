@@ -14,7 +14,7 @@ A quilt atom will be a single letter either "a" or "b".
 """
 # Main Method
 def main():
-    myquilt = pile(sew(a, reflect(a)), reflect(sew(a, reflect(a)), horizontal=True))
+    myquilt = pinwheel(checkerboard(pinwheel(unturn(a)),pinwheel(turn(b)),10,10))
     print(quilt_to_string(myquilt, a_pattern, b_pattern))
 
 
@@ -136,8 +136,23 @@ def flip_hori(atom):
 
 def checkerboard(quilt1, quilt2, m, n):
     '''returns a checkerboard pattern of quilts in a rectangle with m rows and n columns'''
-    newQuilt = []
-    
+    newQuilt = quilt1
+    for c in range(1, n):
+        if c % 2 == 0:
+            newQuilt = sew(newQuilt, quilt1)
+        else:
+            newQuilt = sew(newQuilt, quilt2)
+    for r in range(1, m):
+        if r % 2 == 0:
+            newRow = quilt1
+        else:
+            newRow = quilt2
+        for c in range(1, n):
+            if r % 2 == c % 2:
+                newRow = sew(newRow, quilt1)
+            else:
+                newRow = sew(newRow, quilt2)
+        newQuilt = pile(newQuilt, newRow)    
     return newQuilt
 
 '''
