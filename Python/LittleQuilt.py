@@ -12,13 +12,33 @@ An oriented atom is a tuple of the form ("q",i) where "q" is a quilt atom and i 
     ("q", i) represents "q" rotated clockwise through i clockwise 90 degree rotations.
 A quilt atom will be a single letter either "a" or "b".
 """
+from functools import reduce
 # Main Method
 def main():
-    myquilt = checkerboard(pinwheel(a),pinwheel(turn(turn(b))),10,10)
+    
+    print('turn(a)')
+    print(quilt_to_string(turn(a), a_pattern, b_pattern))
+    print('sew(a, b)')
+    print(quilt_to_string(sew(a,b), a_pattern, b_pattern))
+    print('unturn(a)')
+    print(quilt_to_string(unturn(a), a_pattern, b_pattern))
+    print('pile(a, b)')
+    print(quilt_to_string(pile(a,b), a_pattern, b_pattern))
+    print('pinwheel(a)')
+    print(quilt_to_string(pinwheel(a), a_pattern, b_pattern))
+    print('repeat_block(a, 3 , 3)')
+    print(quilt_to_string(repeat_block(a,3,3), a_pattern, b_pattern))
+    print('reflect(a)')
+    print(quilt_to_string(reflect(a), a_pattern, b_pattern))
+    print('reflect(a, horizontal=True)')
+    print(quilt_to_string(reflect(a, horizontal=True), a_pattern, b_pattern))
+    print('checkerboard(a, b, 3, 3)')
+    print(quilt_to_string(checkerboard(a,b,3,3), a_pattern, b_pattern))
+    print('pseudo_hilbert(3, a)')
+    print(quilt_to_string(pseudo_hilbert(3,a), h1_pattern, h2_pattern))
+    print('Something that might actually resemble a quilt:')
+    myquilt = pinwheel(pile(pile(reduce(sew, [pinwheel(a), repeat_block(pinwheel(turn(b)), 1, 3), pinwheel(a)]), repeat_block(pinwheel(turn(b)), 3, 5)), reduce(sew, [pinwheel(a), repeat_block(pinwheel(turn(b)), 1, 3), pinwheel(a)])))
     print(quilt_to_string(myquilt, a_pattern, b_pattern))
-
-    myquilt = pseudo_hilbert(5, a)
-    print(quilt_to_string(myquilt, h1_pattern, h2_pattern))
 
 
 # Defining Quilt Atoms
@@ -105,41 +125,25 @@ def repeat_block(quilt, m, n):
         result = sew(result, quilt)
     return result
 
-# Extra Credit Functions
-def pseudo_hilbert(n, quilt):
-    '''returns an order n pseudo-hilbert curve using the specified quilt'''
-    for i in range(n):
-        quilt = sew(pile(quilt, turn(quilt)), pile(quilt, unturn(quilt)))
-    return quilt
-'''It's not a very good-looking hilbert curve but that's because of the limitations
-of using only one quilt with no connecting bits. You can sort of follow the pattern, though.
-It always starts at the bottom-left corner, and you can trace the path the hilbert curve would
-take if you know what a hilbert curve looks like.'''
-
+# Extra Credit Functions 
 def reflect(quilt, horizontal = False):
     '''returns the mirror image of the quilt, defaulting to a vertical line of symmetry'''
     newQuilt = []
     if horizontal:                  # reflecting down over a horizontal line of symmetry
-        for r in range(len(quilt)):         # append the rows in reverse order
-            newQuilt.append(quilt[len(quilt) - r - 1])
-        return metamap(flip_hori, newQuilt)
+        return unturn(reflect(turn(quilt)))
     else:                           # reflecting right over a vertical line of symmetry
         for row in quilt:
             newRow = []
             for c in range(len(quilt[0])):  # append each column in reverse order
                 newRow.append(row[len(quilt[0]) - c - 1])
             newQuilt.append(newRow)
-        return metamap(flip_vert, newQuilt)
+        return metamap(flip, newQuilt)
 
-def flip_vert(atom):
+def flip(atom):
     '''flips an atom across a vertical line of symmetry'''
     if atom[1] % 2 == 0:
         return (atom[0], atom[1] + 1)
     return (atom[0], atom[1] - 1)
-
-def flip_hori(atom):
-    '''flips an atom across a horizontal line of symmetry'''
-    return (atom[0], 3 - atom[1])
 
 def checkerboard(quilt1, quilt2, m, n):
     '''returns a checkerboard pattern of quilts in a rectangle with m rows and n columns'''
@@ -161,5 +165,15 @@ def checkerboard(quilt1, quilt2, m, n):
                 newRow = sew(newRow, quilt2)
         newQuilt = pile(newQuilt, newRow)   # pile newRow under newQuilt
     return newQuilt
+
+def pseudo_hilbert(n, quilt):
+    '''returns an order n pseudo-hilbert curve using the specified quilt'''
+    for i in range(n):
+        quilt = sew(pile(quilt, turn(quilt)), pile(quilt, unturn(quilt)))
+    return quilt
+'''It's not a very good-looking hilbert curve but that's because of the limitations
+of using only one quilt with no connecting bits. You can sort of follow the pattern, though.
+It always starts at the bottom-left corner, and you can trace the path the hilbert curve would
+take if you know what a hilbert curve looks like.'''
 
 main()
