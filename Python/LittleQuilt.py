@@ -14,8 +14,11 @@ A quilt atom will be a single letter either "a" or "b".
 """
 # Main Method
 def main():
-    myquilt = checkerboard(pinwheel(unturn(a)),pinwheel(turn(b)),4,10)
+    myquilt = checkerboard(pinwheel(a),pinwheel(turn(turn(b))),10,10)
     print(quilt_to_string(myquilt, a_pattern, b_pattern))
+
+    myquilt = pseudo_hilbert(5, a)
+    print(quilt_to_string(myquilt, h1_pattern, h2_pattern))
 
 
 # Defining Quilt Atoms
@@ -108,6 +111,10 @@ def pseudo_hilbert(n, quilt):
     for i in range(n):
         quilt = sew(pile(quilt, turn(quilt)), pile(quilt, unturn(quilt)))
     return quilt
+'''It's not a very good-looking hilbert curve but that's because of the limitations
+of using only one quilt with no connecting bits. You can sort of follow the pattern, though.
+It always starts at the bottom-left corner, and you can trace the path the hilbert curve would
+take if you know what a hilbert curve looks like.'''
 
 def reflect(quilt, horizontal = False):
     '''returns the mirror image of the quilt, defaulting to a vertical line of symmetry'''
@@ -154,11 +161,5 @@ def checkerboard(quilt1, quilt2, m, n):
                 newRow = sew(newRow, quilt2)
         newQuilt = pile(newQuilt, newRow)   # pile newRow under newQuilt
     return newQuilt
-
-'''
-graphics, when you get around to them :)
-
-'''
-
 
 main()
