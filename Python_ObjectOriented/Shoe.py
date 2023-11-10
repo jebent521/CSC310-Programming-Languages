@@ -13,9 +13,9 @@ class Shoe:
         shuffle(self.cards)                     # shuffle the shoe
 
     def __next__(self):
-        if len(self.cards) == 0:
+        if len(self.cards) == 0:                # stop iterating if no more cards
             raise StopIteration
-        return self.cards.pop()
+        return self.cards.pop()                 # remove card from back of Shoe
     
     def __iter__(self):
         return self
