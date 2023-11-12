@@ -1,3 +1,4 @@
+# Jonah Ebent, 11/13/23, CSC 310, Shoe.py
 from itertools import product
 from random import shuffle
 values = ['A', *list(range(2, 11)), 'J', 'Q', 'K']
@@ -23,4 +24,9 @@ class Shoe:
     def __repr__(self):
         hex_address = '0x'+hex(id(self))[2:].zfill(16).upper()
         return f'<Shoe object at {hex_address}>'
+    
+    def hit(self):
+        if len(self.cards) == 0:
+            raise IndexError("Attempted to hit an empty shoe")
+        return self.cards.pop()
 
