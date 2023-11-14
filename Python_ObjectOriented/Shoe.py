@@ -12,6 +12,7 @@ class Shoe:
             raise ValueError('k must be a positive integer!')
         self.cards = deck * k                   # fill shoe with k decks of cards
         shuffle(self.cards)                     # shuffle the shoe
+        self.k = k                              # store number of decks
 
     def __next__(self):
         if len(self.cards) == 0:                # stop iterating if no more cards
@@ -22,6 +23,9 @@ class Shoe:
         return self
     
     def __repr__(self):
+        return f'Shoe({self.k})'
+
+    def __str__(self):
         hex_address = '0x'+hex(id(self))[2:].zfill(16).upper()
         return f'<Shoe object at {hex_address}>'
     
@@ -29,4 +33,3 @@ class Shoe:
         if len(self.cards) == 0:
             raise IndexError("Attempted to hit an empty shoe")
         return self.cards.pop()
-
