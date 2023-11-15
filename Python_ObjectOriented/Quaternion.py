@@ -47,7 +47,7 @@ class Quaternion:
     def __radd__(self, other):
         return self + other     # works because addition is commutative
 
-    def __sub__(self, other):
+    def __sub__(self, other):   # ensure other is quaternion, then subtract
         if isinstance(other, (int, float)):
             other = Quaternion(other, 0, 0, 0)
         elif isinstance(other, complex):
@@ -58,7 +58,7 @@ class Quaternion:
             raise NotImplemented
         return Quaternion(self.a - other.a, self.b - other.b, self.c - other.c, self.d - other.d)
     
-    def __rsub__(self, other):
+    def __rsub__(self, other):  # ensure other is quaternion, then subtract
         if isinstance(other, (int, float)):
             other = Quaternion(other, 0, 0, 0)
         elif isinstance(other, complex):
@@ -69,7 +69,7 @@ class Quaternion:
             raise NotImplemented
         return Quaternion(other.a - self.a, other.b - self.b, other.c - self.c, other.d - self.d)
     
-    def __mul__(self, other):
+    def __mul__(self, other):   # ensure other is quaternion, then use hamilton product
         if isinstance(other, (int, float)):
             other = Quaternion(other, 0, 0, 0)
         elif isinstance(other, complex):
@@ -84,9 +84,17 @@ class Quaternion:
         d = self.a*other.d + self.b*other.c - self.c*other.b + self.d*other.a
         return Quaternion(a,b,c,d)
     
-    def __rmul__(self, other):
-        return self * other
-    
+    def __rmul__(self, other): # hamilton product is not commutative. ensure other is quaternion, then multiply as normal
+        if isinstance(other, (int, float)):
+            other = Quaternion(other, 0, 0, 0)
+        elif isinstance(other, complex):
+            other = Quaternion(other.real, 0, other.imag, 0)
+        elif isinstance(other, Quaternion):
+            pass
+        else:
+            raise NotImplemented
+        return other * self
+
     def __truediv__(self):
         pass
     
