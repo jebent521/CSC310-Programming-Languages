@@ -1,9 +1,14 @@
 class Quaternion:
     def __init__(self, a, b, c, d) -> None:
-        pass
+        if any(not isinstance(i, (int, float)) for i in [a,b,c,d]):
+            raise ValueError('Coefficients must be numbers.')
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
 
     def __repr__(self) -> str:
-        pass
+        return f'Quaternion({self.a}, {self.b}, {self.c}, {self.d})'
     
     def __str__(self) -> str:
         pass
