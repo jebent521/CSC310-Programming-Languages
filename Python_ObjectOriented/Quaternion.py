@@ -15,19 +15,19 @@ class Quaternion:
             if num == 0:
                 return 0
             return num / abs(num)
-        def mathStuff(num, dim):
-            match signOf(num):
-                case -1:
-                    return f'{str(num)}{dim}'
-                case 0:
-                    return ''
-                case 1:
-                    return f'+{str(num)}{dim}'
         string = ''
-        if self.a != 0:
-            string += str(self.a)
-        for (num, dim) in zip([self.b, self.c, self.d], ['i', 'j', 'k']):
-            string += mathStuff(num, dim)
+        for num, dim in zip([self.a, self.b, self.c, self.d], ['', 'i', 'j', 'k']):
+            if len(string) == 0:
+                if num != 0:
+                    string += f'{str(num)}{dim}'
+            else:
+                match signOf(num):
+                    case -1:
+                        string += f'{str(num)}{dim}'
+                    case 0:
+                        pass
+                    case 1:
+                        string += f'+{str(num)}{dim}'
         if len(string) == 0:
             return '0'
         return string
