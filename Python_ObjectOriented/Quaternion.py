@@ -11,8 +11,35 @@ class Quaternion:
         return f'Quaternion({self.a}, {self.b}, {self.c}, {self.d})'
     
     def __str__(self) -> str:
-        pass
-    
+        def signOf(num):
+            if num == 0:
+                return 0
+            return num / abs(num)
+        string = ''
+        if self.a != 0:
+            string += str(self.a)
+        match signOf(self.b):
+            case -1:
+                string += f'{str(self.b)}i'
+            case 0:
+                pass
+            case 1:
+                string += f'+{str(self.b)}i'
+        match signOf(self.c):
+            case -1:
+                string += f'{str(self.c)}j'
+            case 0:
+                pass
+            case 1:
+                string += f'+{str(self.c)}j'
+        match signOf(self.d):
+            case -1:
+                string += f'{str(self.d)}k'
+            case 0:
+                pass
+            case 1:
+                string += f'+{str(self.d)}k'
+        return string
     def __abs__(self):
         pass
     
