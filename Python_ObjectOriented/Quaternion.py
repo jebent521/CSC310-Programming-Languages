@@ -11,24 +11,22 @@ class Quaternion:
         return f'Quaternion({self.a}, {self.b}, {self.c}, {self.d})'
     
     def __str__(self) -> str:
-        def signOf(num):
+        def signOf(num):            # helper function that returns the sign of the number it's given
             if num == 0:
                 return 0
             return num / abs(num)
         string = ''
         for num, dim in zip([self.a, self.b, self.c, self.d], ['', 'i', 'j', 'k']):
-            if len(string) == 0:
-                if num != 0:
+            if len(string) == 0 and num != 0:           # ensures you don't get any plus signs at the beginning of the expression
                     string += f'{str(num)}{dim}'
             else:
                 match signOf(num):
-                    case -1:
-                        string += f'{str(num)}{dim}'
-                    case 0:
-                        pass
-                    case 1:
-                        string += f'+{str(num)}{dim}'
-        if len(string) == 0:
+                    case -1.0:
+                        string += f'{str(num)}{dim}'    # num provides the negative sign for subtraction
+                    case 1.0:
+                        string += f'+{str(num)}{dim}'   # add a plus sign for addition when num is positive
+                                                        # note, no case for 0: don't add anything to the string
+        if len(string) == 0:                            # if nothing is in the string, return 0
             return '0'
         return string
     def __abs__(self):
