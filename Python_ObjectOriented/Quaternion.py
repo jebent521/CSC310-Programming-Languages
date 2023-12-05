@@ -63,8 +63,6 @@ class Quaternion:
             other = Quaternion(other, 0, 0, 0)
         elif isinstance(other, complex):
             other = Quaternion(other.real, 0, other.imag, 0)
-        elif isinstance(other, Quaternion):
-            pass
         else:
             raise NotImplemented
         return Quaternion(other.a - self.a, other.b - self.b, other.c - self.c, other.d - self.d)
@@ -89,8 +87,6 @@ class Quaternion:
             other = Quaternion(other, 0, 0, 0)
         elif isinstance(other, complex):
             other = Quaternion(other.real, 0, other.imag, 0)
-        elif isinstance(other, Quaternion):
-            pass
         else:
             raise NotImplemented
         return other * self

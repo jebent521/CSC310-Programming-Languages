@@ -1,5 +1,15 @@
-#RPN.py
-
+#Jonah Ebent, CSC310, 12/6/23, HW17 (RPN.py)
+"""
+Extend the function to_postfix() (and hence RPN()) defined in class so that it handles function calls for
+either built in or user-defined functions. Make the simplifying assumption that the functions have no
+keyword arguments (so just things like f(x,y)). For example, RPN('2 + f(x,g(1,2,3))') = '2 x 1 2 3 g f +'. Hint:
+Try something as simple as ast.parse('pow(2,4)'). What type of expression is it (it isn't a BinOp, it is
+something else)? You should be able to discover what it is interactively in the shell. Once you know what
+it is – how do you get to the arguments of the function call? The name of the call? Note: the stack-based
+evaluation algorithm would still apply (suitablt modified), but you would need a dictionary to distinguish
+ordinary variables from function names and associate the right function with its name. Extra credit:
+extend postfix_eval() in this way. For the extra credit inspect.signature might be helpful.
+"""
 import ast
 
 def to_postfix(expr):
@@ -32,7 +42,10 @@ def to_postfix(expr):
         else:
             raise ValueError(f"Can't parse {expr}")
         return ' '.join([left, right, op])
-            
+    elif isinstance(expr,ast.Call): # this is what I added
+        args = [to_postfix(i) for i in expr.args]
+        func = expr.func.id
+        return ' '.join([*args, func])
     else:
         raise ValueError(f"Can't parse {expr}")
 
