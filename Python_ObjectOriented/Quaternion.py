@@ -13,6 +13,7 @@ I used Wikipedia for the formulas (https://en.wikipedia.org/wiki/Quaternion)
 import math
 class Quaternion:
     def __init__(self, a, b, c, d) -> None:
+        '''a, b, c, and d must be ints or floats'''
         if any(not isinstance(i, (int, float)) for i in [a,b,c,d]): # ensure a,b,c,d are numbers
             raise ValueError('Coefficients must be numbers.')
         self.a = a
