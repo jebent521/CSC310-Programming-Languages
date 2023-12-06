@@ -1,7 +1,19 @@
+''' Jonah Ebent, Dr. Coleman, CSC310 Programming Languages, 12/12/23
+Quaternion.py contains a class that defines quaternions, the number system extending the complex numbers.
+It overloads addition, subtraction, multiplication, division, and absolute value.
+I chose not to implement __iadd__, __isub__, etc. because it is not necessary for the quaternion to have
+    the same location in memory before and after these operations.
+Some of the quaternion-specific functions are:
+    norm(),         which returns the size of the quaternion (alias of abs()),
+    conjugate(),    which returns the quaternion's conjugate (a - bi - cj - dk), and
+    inv(),          which returns the multiplicative inverse of the quaternion (equivalent to q ** -1)
+I used Wikipedia for the formulas (https://en.wikipedia.org/wiki/Quaternion)
+'''
+
 import math
 class Quaternion:
     def __init__(self, a, b, c, d) -> None:
-        if any(not isinstance(i, (int, float)) for i in [a,b,c,d]):
+        if any(not isinstance(i, (int, float)) for i in [a,b,c,d]): # ensure a,b,c,d are numbers
             raise ValueError('Coefficients must be numbers.')
         self.a = a
         self.b = b
@@ -20,7 +32,7 @@ class Quaternion:
         for num, dim in zip([self.a, self.b, self.c, self.d], ['', 'i', 'j', 'k']):
             if len(string) == 0 and num != 0:           # ensures you don't get any plus signs at the beginning of the expression
                     string += f'{str(num)}{dim}'
-            else:                                       # note, no case for 0: don't add anything to the string
+            else:                                       # note, no case for num = 0: don't add anything to the string
                 match signOf(num):
                     case -1.0:
                         string += f'{str(num)}{dim}'    # num provides the negative sign for subtraction
@@ -32,24 +44,25 @@ class Quaternion:
     
     # QUATERNION OPERATIONS
     def __abs__(self):
+        '''Returns the size of the quaternion'''
         return math.sqrt(self.a**2 + self.b**2 + self.c**2 + self.d**2)
     
     def norm(self):
-        '''alias for abs(self)'''
+        '''Alias for abs(self)'''
         return abs(self)
     
     def conjugate(self):
+        '''Returns (a-bi-cj-dk)'''
         return Quaternion(self.a, -self.b, -self.c, -self.d)
 
     def inv(self):
-        '''returns self ** -1'''
+        '''Returns self ** -1'''
         den = pow(abs(self), 2)
         a = self.a / den
         b = -self.b / den
         c = -self.c / den
         d = -self.d / den
         return Quaternion(a,b,c,d)
-
 
     # ADDITION
     def __add__(self, other):
@@ -113,7 +126,7 @@ class Quaternion:
         return other * self
 
     # DIVISION
-    def __truediv__(self, other):
+    def __truediv__(self, other):   # ensure other is quaternion, then multiply by inverse of other
         if isinstance(other, (int, float)):
             other = Quaternion(other,0,0,0)
         elif isinstance(other, complex):
@@ -124,7 +137,7 @@ class Quaternion:
             return NotImplemented
         return self * other.inv()
     
-    def __rtruediv__(self, other):
+    def __rtruediv__(self, other):  # ensure other is quaternion, then divide as normal
         if isinstance(other, (int, float)):
             other = Quaternion(other,0,0,0)
         elif isinstance(other, complex):
