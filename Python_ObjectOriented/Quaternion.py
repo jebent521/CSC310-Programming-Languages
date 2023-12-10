@@ -48,10 +48,6 @@ class Quaternion:
         '''Returns the size of the quaternion'''
         return math.sqrt(self.a**2 + self.b**2 + self.c**2 + self.d**2)
     
-    def norm(self):
-        '''Alias for abs(self)'''
-        return abs(self)
-    
     def conjugate(self):
         '''Returns (a-bi-cj-dk)'''
         return Quaternion(self.a, -self.b, -self.c, -self.d)
@@ -82,24 +78,10 @@ class Quaternion:
 
     # SUBTRACTION
     def __sub__(self, other):   # ensure other is quaternion, then subtract
-        if isinstance(other, (int, float)):
-            other = Quaternion(other, 0, 0, 0)
-        elif isinstance(other, complex):
-            other = Quaternion(other.real, 0, other.imag, 0)
-        elif isinstance(other, Quaternion):
-            pass
-        else:
-            return NotImplemented
-        return Quaternion(self.a - other.a, self.b - other.b, self.c - other.c, self.d - other.d)
+        return self + -1 * other
     
     def __rsub__(self, other):  # ensure other is quaternion, then subtract
-        if isinstance(other, (int, float)):
-            other = Quaternion(other, 0, 0, 0)
-        elif isinstance(other, complex):
-            other = Quaternion(other.real, 0, other.imag, 0)
-        else:
-            return NotImplemented
-        return Quaternion(other.a - self.a, other.b - self.b, other.c - self.c, other.d - self.d)
+        return other + -1 * self
     
     # MULTIPLICATION
     def __mul__(self, other):   # ensure other is quaternion, then use hamilton product
@@ -139,10 +121,4 @@ class Quaternion:
         return self * other.inv()
     
     def __rtruediv__(self, other):  # ensure other is quaternion, then divide as normal
-        if isinstance(other, (int, float)):
-            other = Quaternion(other,0,0,0)
-        elif isinstance(other, complex):
-            other = Quaternion(other.real,0,other.imag,0)
-        else:
-            return NotImplemented
-        return other / self
+        return other * self.inv()
